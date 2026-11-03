@@ -22,7 +22,7 @@ A aplicação permite:
 - **Comparar visualmente o desempenho**: tempo de execução e número real de comparações do algoritmo ótimo $O(N \log N)$ contra a Força Bruta $O(N^2)$.
 - **Listar os pares divergentes** com indicação exata de quais músicas geraram conflito na preferência.
 
-## Vídeo de Demonstração + Screenshots
+## Vídeo de Demonstração
 
 O vídeo demonstrando o funcionamento da aplicação, os casos de uso e a explicação prática do algoritmo pode ser assistido no YouTube clicando na imagem abaixo ou pelo link direto:
 
@@ -85,17 +85,6 @@ Responde à pergunta: **qual é o impacto do crescimento quadrático $O(N^2)$ ao
      python3 -m http.server 8000
      ```
      Depois acesse `http://localhost:8000` no seu navegador.
-
-## Screenshots
-
-### 1. Visão Geral e Rankings
-*(Adicione aqui a screenshot da tela inicial com os rankings e presets)*
-
-### 2. Comparativo de Desempenho (O(N log N) vs O(N²))
-*(Adicione aqui a screenshot do teste de benchmark com 1.000 músicas)*
-
-### 3. Pares de Inversão Detectados
-*(Adicione aqui a screenshot dos pares invertidos listados)*
 
 ## 🛠️ Tecnologias Utilizadas
 
