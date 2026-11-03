@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music Matcher | Dividir e Conquistar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            spotify: {
+              green: '#1DB954',
+              hover: '#1ed760',
+              black: '#121212',
+              card: '#181818'
+            }
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-spotify-black text-white min-h-screen font-sans antialiased p-4 md:p-6 selection:bg-spotify-green selection:text-black">
+
+  <div class="max-w-4xl mx-auto space-y-4">
+
+    <!-- CABEÇALHO COMPACTO -->
+    <header class="flex items-center justify-between border-b border-neutral-800 pb-3">
+      <div>
+        <h1 class="text-lg font-bold flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-spotify-green inline-block"></span>
+          Music Matcher
+        </h1>
+        <p class="text-xs text-neutral-400">Contagem de Inversões &middot; Projeto de Algoritmos</p>
+      </div>
+
+      <!-- Presets de 1-Clique -->
+      <div class="flex items-center gap-1.5 text-xs">
+        <button onclick="aplicarCenario('identico')" class="px-2.5 py-1 rounded bg-neutral-800 hover:bg-neutral-700 transition">Idêntico</button>
+        <button onclick="aplicarCenario('parecido')" class="px-2.5 py-1 rounded bg-neutral-800 hover:bg-neutral-700 transition">Parecido</button>
+        <button onclick="aplicarCenario('oposto')" class="px-2.5 py-1 rounded bg-neutral-800 hover:bg-neutral-700 transition">Invertido</button>
+        <button onclick="aplicarCenario('benchmark')" class="px-2.5 py-1 rounded bg-spotify-green/20 text-spotify-green hover:bg-spotify-green/30 border border-spotify-green/40 transition">1.000 Músicas</button>
+      </div>
+    </header>
+
+    <!-- GRID PRINCIPAL -->
+    <main class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <!-- COLUNA 1: RANKINGS (ENTRADA) -->
+      <section class="space-y-3">
+        <!-- Usuário A -->
+        <div class="bg-spotify-card border border-neutral-800/80 rounded-lg p-3">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-neutral-400 block mb-2">Usuário A (Referência Fixa)</span>
+          <ul id="lista-usuario-a" class="space-y-1"></ul>
+        </div>
+
+        <!-- Usuário B -->
+        <div class="bg-spotify-card border border-neutral-800/80 rounded-lg p-3">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-spotify-green">Usuário B (Reordenável)</span>
+            <span class="text-[10px] text-neutral-500">Mova com ▲ ▼</span>
+          </div>
+          <ul id="lista-usuario-b" class="space-y-1"></ul>
+        </div>
+      </section>
+
+      <!-- COLUNA 2: RESULTADOS (SAÍDA) -->
+      <section class="space-y-3">
+
+        <!-- Match & Total de Inversões -->
+        <div class="bg-spotify-card border border-neutral-800/80 rounded-lg p-4 grid grid-cols-2 gap-3 items-center text-center">
+          <div class="border-r border-neutral-800">
+            <span class="text-[11px] text-neutral-400 uppercase tracking-wider block">Afinidade</span>
+            <span id="porcentagem-afinidade" class="text-3xl font-black text-spotify-green block mt-1">100%</span>
+          </div>
+          <div>
+            <span class="text-[11px] text-neutral-400 uppercase tracking-wider block">Inversões</span>
+            <div class="flex items-baseline justify-center gap-1 mt-1">
+              <span id="total-inversoes" class="text-3xl font-extrabold text-white">0</span>
+              <span id="max-inversoes" class="text-[10px] text-neutral-500 font-mono">/ máx 10</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparador de Algoritmos -->
+        <div class="bg-spotify-card border border-neutral-800/80 rounded-lg p-3 space-y-2">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-neutral-400 block">Comparativo de Desempenho</span>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <!-- Dividir e Conquistar -->
+            <div class="bg-neutral-900 border border-spotify-green/30 rounded p-2.5">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-bold text-spotify-green">D&C (Merge Sort)</span>
+                <span class="font-mono text-[10px] text-spotify-green font-bold">O(N log N)</span>
+              </div>
+              <div id="comparacoes-dc" class="text-white font-mono text-[11px]">0 comparações</div>
+              <div id="tempo-dc" class="text-neutral-400 font-mono text-[10px]">0.000 ms</div>
+            </div>
+
+            <!-- Força Bruta -->
+            <div class="bg-neutral-900 border border-neutral-800 rounded p-2.5">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-bold text-neutral-400">Força Bruta</span>
+                <span class="font-mono text-[10px] text-neutral-500 font-bold">O(N²)</span>
+              </div>
+              <div id="comparacoes-fb" class="text-white font-mono text-[11px]">0 comparações</div>
+              <div id="tempo-fb" class="text-neutral-400 font-mono text-[10px]">0.000 ms</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pares Invertidos -->
+        <div class="bg-spotify-card border border-neutral-800/80 rounded-lg p-3">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-neutral-400 block mb-2">Pares Invertidos</span>
+          <ul id="lista-pares-divergentes" class="space-y-1 max-h-48 overflow-y-auto"></ul>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <script src="algorithms.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
